@@ -96,7 +96,10 @@ export default {
         .then((response) => {
           console.log(response.data.data);
           if (response.data.data.access_token != null) {
-            localStorage.setItem("access_token", response.data.data.access_token);
+            localStorage.setItem(
+              "access_token",
+              response.data.data.access_token
+            );
             localStorage.setItem(
               "refresh_token",
               response.data.data.refresh_token

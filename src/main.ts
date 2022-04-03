@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router';
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import { createI18n } from 'vue-i18n'
 
 import { IonicVue } from '@ionic/vue';
 
@@ -28,9 +29,15 @@ import '@ionic/vue/css/typography.css';
 /* Theme variables */
 import './theme/variables.css';
 
+const i18n = createI18n({
+  // something vue-i18n options here ...
+})
+
+
 const app = createApp(App)
   .use(IonicVue)
   .use(router)
+  .use(i18n)
   .use(VueAxios, axios);
   
 router.isReady().then(() => {

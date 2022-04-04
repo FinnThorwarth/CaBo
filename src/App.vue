@@ -168,6 +168,9 @@ export default defineComponent({
         if (localStorage.getItem("user_data") != null) {
           this.userData = JSON.parse(localStorage.getItem("user_data")!);
         }
+      }else{
+        this.userLoggedIn = false;
+        this.$router.push("/login");
       }
     },
     getOnlineMode() {

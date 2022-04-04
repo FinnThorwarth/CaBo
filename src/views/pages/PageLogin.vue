@@ -42,7 +42,7 @@
   </ion-page>
 </template>
 
-<script>
+<script lang="ts">
 import {
   IonPage,
   IonLabel,

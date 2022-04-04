@@ -41,6 +41,10 @@
 </template>
 
 <script lang="ts">
+import { defineComponent, ref } from "vue";
+import { useRoute } from "vue-router";
+import axios from "axios";
+import { userTypes } from "./types/UserTypes";
 import {
   IonApp,
   IonContent,
@@ -68,10 +72,6 @@ import {
   homeOutline,
   homeSharp,
 } from "ionicons/icons";
-
-import { defineComponent, ref } from "vue";
-import { useRoute } from "vue-router";
-import axios from "axios";
 
 export default defineComponent({
   name: "App",
@@ -131,10 +131,7 @@ export default defineComponent({
     return {
       onlineMode: false,
       userLoggedIn: false,
-      userData: {
-        first_name: "",
-        last_name: "",
-      },
+      userData: {} as userTypes,
     };
   },
   mounted() {
@@ -171,7 +168,9 @@ export default defineComponent({
         this.userLoggedIn = true;
         // Userdaten aus dem LocalStorage holen
         if (localStorage.getItem("user_data") != null) {
-          this.userData = JSON.parse((localStorage.getItem("user_data") as string) || "");
+          this.userData = JSON.parse(
+            (localStorage.getItem("user_data") as string) || ""
+          );
         }
       } else {
         this.userLoggedIn = false;
@@ -188,7 +187,7 @@ export default defineComponent({
           console.log("Refreshing token");
           axios
             .post("https://api.cabo-management.de/auth/refresh", {
-              refresh_token: localStorage.getItem(("refresh_token") as string),
+              refresh_token: localStorage.getItem("refresh_token" as string),
             })
             .then((response) => {
               localStorage.setItem("access_token", response.data.access_token);

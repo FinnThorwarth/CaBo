@@ -43,7 +43,7 @@
 </template>
 
 <script lang="ts">
-import {
+import { 
   IonPage,
   IonLabel,
   IonInput,

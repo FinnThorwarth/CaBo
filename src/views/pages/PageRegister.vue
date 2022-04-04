@@ -85,7 +85,8 @@
   </ion-page>
 </template>
 
-<script>
+<script type="ts">
+import { defineComponent } from "vue";
 import {
   IonPage,
   IonLabel,
@@ -103,7 +104,7 @@ import {
 } from "@ionic/vue";
 import axios from "axios";
 
-export default {
+export default defineComponent({
   name: "PageLogin",
 
   components: {
@@ -165,7 +166,7 @@ export default {
         });
     },
   },
-};
+});
 </script>
 
 <style>

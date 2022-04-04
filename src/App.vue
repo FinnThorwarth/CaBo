@@ -5,7 +5,14 @@
         <ion-content>
           <ion-list id="inbox-list">
             <ion-list-header>Menü</ion-list-header>
-            <ion-note class="ion-padding-start" v-if="userData" ><span v-if="userData.first_name != ''">{{ userData.first_name }}</span><span v-if="userData.last_name != ''">{{ userData.last_name }}</span></ion-note>
+            <ion-note class="ion-padding-start" v-if="userData"
+              ><span v-if="userData.first_name != ''">{{
+                userData.first_name
+              }}</span
+              ><span v-if="userData.last_name != ''">{{
+                userData.last_name
+              }}</span></ion-note
+            >
 
             <ion-menu-toggle
               auto-hide="false"
@@ -128,7 +135,6 @@ export default defineComponent({
         first_name: "",
         last_name: "",
       },
-      timer: 0,
     };
   },
   mounted() {
@@ -137,9 +143,7 @@ export default defineComponent({
     this.getLoggedIn();
 
     // Heartbeat
-    this.timer = setInterval(() => {
-      this.refreshAuthToken();
-    }, 800000);
+    this.refreshAuthToken();
   },
   methods: {
     getUserData() {
@@ -169,7 +173,7 @@ export default defineComponent({
         if (localStorage.getItem("user_data") != null) {
           this.userData = JSON.parse(localStorage.getItem("user_data")!);
         }
-      }else{
+      } else {
         this.userLoggedIn = false;
         this.$router.push("/login");
       }
@@ -180,18 +184,23 @@ export default defineComponent({
 
     refreshAuthToken() {
       if (this.onlineMode) {
-        console.log("Refreshing token");
-        axios
-          .post("https://api.cabo-management.de/auth/refresh", {
-            refresh_token: localStorage.getItem("refresh_token")!,
-          })
-          .then((response) => {
-            localStorage.setItem("access_token", response.data.access_token);
-            localStorage.setItem("refresh_token", response.data.refresh_token);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+        setInterval(function () {
+          console.log("Refreshing token");
+          axios
+            .post("https://api.cabo-management.de/auth/refresh", {
+              refresh_token: localStorage.getItem("refresh_token")!,
+            })
+            .then((response) => {
+              localStorage.setItem("access_token", response.data.access_token);
+              localStorage.setItem(
+                "refresh_token",
+                response.data.refresh_token
+              );
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        }, 5000);
       }
     },
   },

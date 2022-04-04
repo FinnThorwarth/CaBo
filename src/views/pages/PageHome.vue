@@ -9,9 +9,9 @@
 </template>
 
 <script lang="ts">
+import { defineComponent } from "vue";
 import Header from "../components/HeaderComponent.vue";
 import { IonContent, IonPage } from "@ionic/vue";
-import { defineComponent } from "vue";
 
 export default defineComponent({
   name: "HomePage",

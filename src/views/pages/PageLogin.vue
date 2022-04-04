@@ -43,7 +43,8 @@
 </template>
 
 <script lang="ts">
-import { 
+import { defineComponent} from "vue";
+import {
   IonPage,
   IonLabel,
   IonInput,
@@ -60,7 +61,7 @@ import {
 } from "@ionic/vue";
 import axios from "axios";
 
-export default {
+export default defineComponent({
   name: "PageLogin",
 
   components: {
@@ -87,8 +88,8 @@ export default {
     };
   },
   methods: {
-    login() {
-      axios
+    login(): Promise<any> {
+      return axios
         .post("https://api.cabo-management.de/auth/login", {
           email: this.email,
           password: this.password,
@@ -113,7 +114,7 @@ export default {
         });
     },
   },
-};
+});
 </script>
 
 <style>

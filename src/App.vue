@@ -5,9 +5,7 @@
         <ion-content>
           <ion-list id="inbox-list">
             <ion-list-header>Menü</ion-list-header>
-            <ion-note class="ion-padding-start" v-if="userData"
-              >{{ userData.first_name }} {{ userData.last_name }}</ion-note
-            >
+            <ion-note class="ion-padding-start" v-if="userData" ><span v-if="userData.first_name != ''">{{ userData.first_name }}</span><span v-if="userData.last_name != ''">{{ userData.last_name }}</span></ion-note>
 
             <ion-menu-toggle
               auto-hide="false"
@@ -126,7 +124,10 @@ export default defineComponent({
     return {
       onlineMode: false,
       userLoggedIn: false,
-      userData: {},
+      userData: {
+        first_name: "",
+        last_name: "",
+      },
       timer: 0,
     };
   },

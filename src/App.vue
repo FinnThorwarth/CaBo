@@ -171,7 +171,7 @@ export default defineComponent({
         this.userLoggedIn = true;
         // Userdaten aus dem LocalStorage holen
         if (localStorage.getItem("user_data") != null) {
-          this.userData = JSON.parse(localStorage.getItem("user_data")!);
+          this.userData = JSON.parse((localStorage.getItem("user_data") as string) || "");
         }
       } else {
         this.userLoggedIn = false;
@@ -188,7 +188,7 @@ export default defineComponent({
           console.log("Refreshing token");
           axios
             .post("https://api.cabo-management.de/auth/refresh", {
-              refresh_token: localStorage.getItem("refresh_token")!,
+              refresh_token: localStorage.getItem(("refresh_token") as string),
             })
             .then((response) => {
               localStorage.setItem("access_token", response.data.access_token);

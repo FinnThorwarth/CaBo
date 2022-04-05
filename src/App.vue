@@ -5,12 +5,12 @@
         <ion-content>
           <ion-list id="inbox-list">
             <ion-list-header>Menü</ion-list-header>
-            <ion-note class="ion-padding-start" v-if="userData"
-              ><span v-if="userData.first_name != ''">{{
-                userData.first_name
+            <ion-note class="ion-padding-start" v-if="userData.users_me"
+              ><span v-if="userData.users_me.first_name != ''">{{
+                userData.users_me.first_name
               }}</span
-              ><span v-if="userData.last_name != ''">{{
-                userData.last_name
+              ><span v-if="userData.users_me.last_name != ''">{{
+                userData.users_me.last_name
               }}</span></ion-note
             >
 
@@ -137,15 +137,14 @@ export default defineComponent({
   async mounted() {
     console.log("mounted");
     this.getOnlineMode();
-    this.getUserData();
     this.getLoggedIn();
-
+    this.getUserData();
     // Heartbeat
     this.refreshAuthToken();
   },
   methods: {
     getUserData() {
-      if (this.onlineMode) {
+      if (this.onlineMode && this.userLoggedIn) {
         axios({
           method: "POST",
           url: "https://api.cabo-management.de/graphql/system",
@@ -203,15 +202,13 @@ export default defineComponent({
             })
             .then((response) => {
               localStorage.setItem("access_token", response.data.access_token);
-              localStorage.setItem(
-                "refresh_token",
-                response.data.refresh_token
+              localStorage.setItem( "refresh_token", response.data.refresh_token
               );
             })
             .catch((error) => {
               console.log(error);
             });
-        }, 850000);
+        }, 60000);
       }
     },
   },

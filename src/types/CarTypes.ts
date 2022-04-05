@@ -7,6 +7,8 @@ export interface CarTypes {
     price: number;
     image: string;
     description: string;
+    mileage: number;
+    fuel: string;
     created_at: string;
     updated_at: string;
 }

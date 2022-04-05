@@ -107,14 +107,39 @@ export default defineComponent({
   data() {
     return {
       car: {} as CarTypes,
+      carbrands: {} as any,
     };
+  },
+
+  async mounted() {
+    // get car brands with graphql
+    var result = await axios({
+      method: "POST",
+      url: "https://api.cabo-management.de/graphql",
+      data: {
+        query: `
+        {
+          CarBrands {
+            id
+            Name
+          }
+        }
+      `,
+      },
+    })
+      .then((res) => {
+        this.carbrands = res.data.data.carbrands;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   },
 
   methods: {
     async createCar() {
       const header = {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
       };
       await axios

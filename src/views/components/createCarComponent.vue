@@ -113,9 +113,12 @@ export default defineComponent({
 
   async mounted() {
     // get car brands with graphql
-    var result = await axios({
+    await axios({
       method: "POST",
       url: "https://api.cabo-management.de/graphql",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      },
       data: {
         query: `
         {

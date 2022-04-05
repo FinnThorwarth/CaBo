@@ -134,7 +134,8 @@ export default defineComponent({
       userData: {} as userTypes,
     };
   },
-  mounted() {
+  async mounted() {
+    console.log("mounted");
     this.getOnlineMode();
     this.getUserData();
     this.getLoggedIn();
@@ -145,12 +146,23 @@ export default defineComponent({
   methods: {
     getUserData() {
       if (this.onlineMode) {
-        axios
-          .get("https://api.cabo-management.de/users/me", {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-            },
-          })
+        axios({
+          method: "POST",
+          url: "https://api.cabo-management.de/graphql/system",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+          data: {
+            query: `
+        {
+          users_me {
+            first_name 
+            last_name
+          }
+        }
+      `,
+          },
+        })
           .then((response) => {
             console.log(response.data.data);
             localStorage.setItem(
@@ -164,7 +176,7 @@ export default defineComponent({
       }
     },
     getLoggedIn() {
-      if (localStorage.getItem("access_token") != null) {
+      if (localStorage.getItem("access_token") != null && localStorage.getItem("access_token") != "undefined") {
         this.userLoggedIn = true;
         // Userdaten aus dem LocalStorage holen
         if (localStorage.getItem("user_data") != null) {
@@ -178,11 +190,11 @@ export default defineComponent({
       }
     },
     getOnlineMode() {
-      return true;
+      this.onlineMode = true;
     },
 
     refreshAuthToken() {
-      if (this.onlineMode) {
+      if (this.onlineMode && this.userLoggedIn) {
         setInterval(function () {
           console.log("Refreshing token");
           axios
@@ -199,7 +211,7 @@ export default defineComponent({
             .catch((error) => {
               console.log(error);
             });
-        }, 5000);
+        }, 850000);
       }
     },
   },

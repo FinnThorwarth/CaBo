@@ -175,7 +175,10 @@ export default defineComponent({
       }
     },
     getLoggedIn() {
-      if (localStorage.getItem("access_token") != null && localStorage.getItem("access_token") != "undefined") {
+      if (
+        localStorage.getItem("access_token") != null &&
+        localStorage.getItem("access_token") != "undefined"
+      ) {
         this.userLoggedIn = true;
         // Userdaten aus dem LocalStorage holen
         if (localStorage.getItem("user_data") != null) {
@@ -196,19 +199,33 @@ export default defineComponent({
       if (this.onlineMode && this.userLoggedIn) {
         setInterval(function () {
           console.log("Refreshing token");
-          axios
-            .post("https://api.cabo-management.de/auth/refresh", {
-              refresh_token: localStorage.getItem("refresh_token" as string),
-            })
+
+          let refresh_token = localStorage.getItem("refresh_token" as string);
+
+          axios({
+            method: "POST",
+            url: "https://api.cabo-management.de/graphql/system",
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+            },
+            data: {
+              query: `
+              mutation {
+              auth_refresh(refresh_token: "${refresh_token}", mode: json) {
+              access_token
+              refresh_token
+            }
+          }
+        `,
+            },
+          })
             .then((response) => {
-              localStorage.setItem("access_token", response.data.access_token);
-              localStorage.setItem( "refresh_token", response.data.refresh_token
-              );
+              console.log(response.data.data);
             })
             .catch((error) => {
               console.log(error);
             });
-        }, 60000);
+        }, 1000 * 60 * 5);
       }
     },
   },

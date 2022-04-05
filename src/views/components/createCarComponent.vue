@@ -73,6 +73,7 @@ import axios from "axios";
 import {
   IonLabel,
   IonInput,
+  IonTextarea,
   IonItem,
   IonButton,
   IonGrid,
@@ -92,6 +93,7 @@ export default defineComponent({
   components: {
     IonLabel,
     IonInput,
+    IonTextarea,
     IonItem,
     IonButton,
     IonGrid,

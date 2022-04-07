@@ -153,13 +153,13 @@ export default defineComponent({
           },
           data: {
             query: `
-        {
-          users_me {
-            first_name 
-            last_name
-          }
-        }
-      `,
+              {
+                users_me {
+                  first_name 
+                  last_name
+                }
+              }
+            `,
           },
         })
           .then((response) => {
@@ -171,6 +171,10 @@ export default defineComponent({
           })
           .catch((error) => {
             console.log(error);
+            //if error is 403 refresh token
+            if (error.response.status === 403) {
+              this.refreshAuthToken();
+            }
           });
       }
     },
@@ -196,36 +200,52 @@ export default defineComponent({
     },
 
     refreshAuthToken() {
-      if (this.onlineMode && this.userLoggedIn) {
-        setInterval(function () {
-          console.log("Refreshing token");
-
-          let refresh_token = localStorage.getItem("refresh_token" as string);
-
-          axios({
-            method: "POST",
-            url: "https://api.cabo-management.de/graphql/system",
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-            },
-            data: {
-              query: `
+      let refresh_token = localStorage.getItem("refresh_token" as string);
+      axios({
+        method: "POST",
+        url: "https://api.cabo-management.de/graphql/system",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+        data: {
+          query: `
               mutation {
               auth_refresh(refresh_token: "${refresh_token}", mode: json) {
               access_token
               refresh_token
-            }
+                }
+              }
+            `,
+        },
+      })
+        .then((response) => {
+          // Store data in localStorage
+          localStorage.setItem(
+            "access_token",
+            response.data.data.auth_refresh.access_token
+          );
+          localStorage.setItem(
+            "refresh_token",
+            response.data.data.auth_refresh.refresh_token
+          );
+        })
+
+        .catch((error) => {
+          console.log(error);
+          //if error is 403 redirect to login
+          if (error.response.status === 403) {
+            this.userLoggedIn = false;
+            this.$router.push("/login");
           }
-        `,
-            },
-          })
-            .then((response) => {
-              console.log(response.data.data);
-            })
-            .catch((error) => {
-              console.log(error);
-            });
-        }, 300000);
+        });
+    },
+
+    refreshAuthTokenInterval() {
+      if (this.onlineMode && this.userLoggedIn) {
+        setInterval(function (this: any) {
+          console.log("Refreshing token");
+          this.refreshAuthToken();
+        }, 60000);
       }
     },
   },

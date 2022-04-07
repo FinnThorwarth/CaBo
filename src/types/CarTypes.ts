@@ -10,5 +10,5 @@ export interface CarTypes {
     mileage: number;
     fuel: string;
     created_at: string;
-    updated_at: string;
+    updated_at: string; 
 }

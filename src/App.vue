@@ -5,12 +5,12 @@
         <ion-content>
           <ion-list id="inbox-list">
             <ion-list-header>Menü</ion-list-header>
-            <ion-note class="ion-padding-start" v-if="userData.users_me"
-              ><span v-if="userData.users_me.first_name != ''">{{
-                userData.users_me.first_name
+            <ion-note class="ion-padding-start" v-if="userData"
+              ><span v-if="userData.first_name != ''">{{
+                userData.first_name
               }}</span
-              ><span v-if="userData.users_me.last_name != ''">{{
-                userData.users_me.last_name
+              ><span v-if="userData.last_name != ''">{{
+                userData.last_name
               }}</span></ion-note
             >
 
@@ -166,7 +166,7 @@ export default defineComponent({
             console.log(response.data.data);
             localStorage.setItem(
               "user_data",
-              JSON.stringify(response.data.data)
+              JSON.stringify(response.data.data.users_me)
             );
           })
           .catch((error) => {

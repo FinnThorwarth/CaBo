@@ -86,7 +86,7 @@ import {
   IonText,
 } from "@ionic/vue";
 
-import { CarTypes } from "../../types/carTypes";
+import { CarTypes } from "../../types/CarTypes";
 
 export default defineComponent({
   name: "createCarComponent",

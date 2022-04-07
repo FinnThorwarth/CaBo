@@ -140,7 +140,7 @@ export default defineComponent({
     this.getLoggedIn();
     this.getUserData();
     // Heartbeat
-    this.refreshAuthToken();
+    this.refreshAuthTokenInterval();
   },
   methods: {
     getUserData() {
@@ -198,6 +198,16 @@ export default defineComponent({
     getOnlineMode() {
       this.onlineMode = true;
     },
+    
+    // Interval zum Prüfen und reaktivieren des Tokens
+    refreshAuthTokenInterval() {
+      if (this.onlineMode && this.userLoggedIn) {
+        setInterval(() => {
+          console.log("Refreshing token");
+          this.refreshAuthToken();
+        }, 300000);
+      }
+    },
 
     refreshAuthToken() {
       let refresh_token = localStorage.getItem("refresh_token" as string);
@@ -238,15 +248,6 @@ export default defineComponent({
             this.$router.push("/login");
           }
         });
-    },
-
-    refreshAuthTokenInterval() {
-      if (this.onlineMode && this.userLoggedIn) {
-        setInterval(function (this: any) {
-          console.log("Refreshing token");
-          this.refreshAuthToken();
-        }, 60000);
-      }
     },
   },
 });

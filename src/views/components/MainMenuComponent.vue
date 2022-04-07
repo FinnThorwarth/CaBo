@@ -1,5 +1,5 @@
 <template>
-  <ion-menu v-if="userLoggedIn" content-id="main-content" type="overlay">
+  <ion-menu content-id="main-content" type="overlay">
     <ion-content>
       <ion-list id="inbox-list">
         <ion-list-header>Menü</ion-list-header>
@@ -67,10 +67,6 @@ export default defineComponent({
     IonNote,
   },
   props: {
-    userLoggedIn: {
-      type: Boolean,
-      required: true,
-    },
     userData: {
       type: Object,
       required: true,

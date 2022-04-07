@@ -15,7 +15,7 @@
               <ion-grid>
                 <ion-row>
                   <ion-col size="12">
-                    <ion-text v-if="this.error != ''" color="danger">
+                    <ion-text v-if="error != ''" color="danger">
                       <h4>{{ error }}</h4>
                     </ion-text>
                     <ion-item>
@@ -43,7 +43,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent} from "vue";
+import { defineComponent } from "vue";
 import {
   IonPage,
   IonLabel,
@@ -105,12 +105,45 @@ export default defineComponent({
               "refresh_token",
               response.data.data.refresh_token
             );
-            this.$router.push("/");
+            // Die Userdaten auslesen
+            this.getUserData();
           } else this.error = "Falsche Email oder Passwort";
         })
         .catch((error) => {
           console.log(error);
           this.error = "Falsche Email oder Passwort";
+        });
+    },
+
+    getUserData() {
+      axios({
+        method: "POST",
+        url: "https://api.cabo-management.de/graphql/system",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+        data: {
+          query: `
+              {
+                users_me {
+                  first_name 
+                  last_name
+                }
+              }
+            `,
+        },
+      })
+        .then((response) => {
+          console.log(response.data.data);
+          localStorage.setItem(
+            "user_data",
+            JSON.stringify(response.data.data.users_me)
+          );
+          // Auf die Startseite umleiten
+          this.$router.push("/");
+        })
+        .catch((error) => {
+          console.log(error);
         });
     },
   },

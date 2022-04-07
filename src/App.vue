@@ -2,7 +2,7 @@
   <ion-app>
     <ion-split-pane content-id="main-content">
       <!-- Insert Menu -->
-      <main-menu :userLoggedIn="userLoggedIn" :userData="userData"  />
+      <main-menu v-if="userLoggedIn" :userData="userData"  />
       <ion-router-outlet id="main-content"></ion-router-outlet>
     </ion-split-pane>
   </ion-app>
@@ -53,47 +53,11 @@ export default defineComponent({
     console.log("mounted");
     this.getOnlineMode();
     this.getLoggedIn();
-    this.getUserData();
     // Heartbeat
     this.refreshAuthTokenInterval();
   },
   methods: {
-    getUserData() {
-      if (this.onlineMode && this.userLoggedIn) {
-        axios({
-          method: "POST",
-          url: "https://api.cabo-management.de/graphql/system",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-          data: {
-            query: `
-              {
-                users_me {
-                  first_name 
-                  last_name
-                }
-              }
-            `,
-          },
-        })
-          .then((response) => {
-            console.log(response.data.data);
-            localStorage.setItem(
-              "user_data",
-              JSON.stringify(response.data.data.users_me)
-            );
-          })
-          .catch((error) => {
-            console.log(error);
-            //if error is 403 refresh token
-            if (error.response.status === 403) {
-              this.refreshAuthToken();
-            }
-          });
-      }
-    },
-    getLoggedIn() {
+     getLoggedIn() {
       if (
         localStorage.getItem("access_token") != null &&
         localStorage.getItem("access_token") != "undefined"

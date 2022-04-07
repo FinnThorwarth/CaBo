@@ -19,16 +19,21 @@
               <ion-row>
                 <ion-col size="12">
                   <ion-item>
+                    <!-- Select car brand with search -->
                     <ion-label position="floating">Marke</ion-label>
-                    <ion-input type="text" v-model="car.brand"></ion-input>
+                    <ion-select v-model="car.brand" placeholder="Marke">
+                      <ion-select-option
+                        v-for="brand in carBrands"
+                        :value="brand.id"
+                        :key="brand.id"
+                      >
+                        {{ brand.Name }}
+                      </ion-select-option>
+                    </ion-select>
                   </ion-item>
                   <ion-item>
                     <ion-label position="floating">Model</ion-label>
                     <ion-input type="text" v-model="car.model"></ion-input>
-                  </ion-item>
-                  <ion-item>
-                    <ion-label position="floating">Jahr</ion-label>
-                    <ion-input type="text" v-model="car.year"></ion-input>
                   </ion-item>
                   <ion-item>
                     <ion-label position="floating">Farbe</ion-label>
@@ -73,6 +78,8 @@ import axios from "axios";
 import {
   IonLabel,
   IonInput,
+  IonSelect,
+  IonSelectOption,
   IonTextarea,
   IonItem,
   IonButton,
@@ -93,6 +100,8 @@ export default defineComponent({
   components: {
     IonLabel,
     IonInput,
+    IonSelect,
+    IonSelectOption,
     IonTextarea,
     IonItem,
     IonButton,
@@ -109,7 +118,11 @@ export default defineComponent({
   data() {
     return {
       car: {} as CarTypes,
-      carbrands: {} as any,
+      carBrands: {} as any,
+      filterBrand: "",
+      modals: {
+        selectBrand: false,
+      },
     };
   },
 
@@ -127,13 +140,14 @@ export default defineComponent({
           CarBrands {
             id
             Name
+            Short_Name
           }
         }
       `,
       },
     })
       .then((res) => {
-        this.carbrands = res.data.data.carbrands;
+        this.carBrands = res.data.data.CarBrands;
       })
       .catch((error) => {
         console.log(error);

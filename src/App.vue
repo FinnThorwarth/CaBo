@@ -225,7 +225,7 @@ export default defineComponent({
             .catch((error) => {
               console.log(error);
             });
-        }, 1000 * 60 * 5);
+        }, 300000);
       }
     },
   },

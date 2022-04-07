@@ -1,64 +1,19 @@
 <template>
   <ion-app>
     <ion-split-pane content-id="main-content">
-      <ion-menu v-if="userLoggedIn" content-id="main-content" type="overlay">
-        <ion-content>
-          <ion-list id="inbox-list">
-            <ion-list-header>Menü</ion-list-header>
-            <ion-note class="ion-padding-start" v-if="userData"
-              ><span v-if="userData.first_name != ''">{{
-                userData.first_name
-              }}</span
-              ><span v-if="userData.last_name != ''">{{
-                userData.last_name
-              }}</span></ion-note
-            >
-
-            <ion-menu-toggle
-              auto-hide="false"
-              v-for="(p, i) in appPages"
-              :key="i"
-            >
-              <ion-item
-                @click="selectedIndex = i"
-                router-direction="root"
-                :router-link="p.url"
-                lines="none"
-                detail="false"
-                class="hydrated"
-                :class="{ selected: selectedIndex === i }"
-              >
-                <ion-icon :ios="p.iosIcon" :md="p.mdIcon"></ion-icon>
-                <ion-label>{{ p.title }}</ion-label>
-              </ion-item>
-            </ion-menu-toggle>
-          </ion-list>
-        </ion-content>
-      </ion-menu>
+      <!-- Insert Menu -->
+      <main-menu :userLoggedIn="userLoggedIn" :userData="userData"  />
       <ion-router-outlet id="main-content"></ion-router-outlet>
     </ion-split-pane>
   </ion-app>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
-import { useRoute } from "vue-router";
+import { defineComponent} from "vue";
 import axios from "axios";
 import { userTypes } from "./types/UserTypes";
-import {
-  IonApp,
-  IonContent,
-  IonIcon,
-  IonItem,
-  IonLabel,
-  IonList,
-  IonListHeader,
-  IonMenu,
-  IonMenuToggle,
-  IonNote,
-  IonRouterOutlet,
-  IonSplitPane,
-} from "@ionic/vue";
+import  MainMenu from "./views/components/MainMenuComponent.vue";
+import { IonApp, IonRouterOutlet, IonSplitPane } from "@ionic/vue";
 
 import {
   archiveOutline,
@@ -67,64 +22,24 @@ import {
   trashSharp,
   warningOutline,
   warningSharp,
-  settingsSharp,
-  settingsOutline,
-  homeOutline,
-  homeSharp,
 } from "ionicons/icons";
 
 export default defineComponent({
   name: "App",
   components: {
     IonApp,
-    IonContent,
-    IonIcon,
-    IonItem,
-    IonLabel,
-    IonList,
-    IonListHeader,
-    IonMenu,
-    IonMenuToggle,
-    IonNote,
     IonRouterOutlet,
     IonSplitPane,
+    MainMenu,
   },
   setup() {
-    const selectedIndex = ref(0);
-    const appPages = [
-      {
-        title: "Home",
-        url: "/home",
-        iosIcon: homeOutline,
-        mdIcon: homeSharp,
-      },
-      {
-        title: "Settings",
-        url: "/settings",
-        iosIcon: settingsOutline,
-        mdIcon: settingsSharp,
-      },
-    ];
-
-    const path = window.location.pathname.split("folder/")[1];
-    if (path !== undefined) {
-      selectedIndex.value = appPages.findIndex(
-        (page) => page.title.toLowerCase() === path.toLowerCase()
-      );
-    }
-
-    const route = useRoute();
-
     return {
-      selectedIndex,
-      appPages,
       archiveOutline,
       archiveSharp,
       trashOutline,
       trashSharp,
       warningOutline,
       warningSharp,
-      isSelected: (url: string) => (url === route.path ? "selected" : ""),
     };
   },
   data() {
@@ -198,7 +113,7 @@ export default defineComponent({
     getOnlineMode() {
       this.onlineMode = true;
     },
-    
+
     // Interval zum Prüfen und reaktivieren des Tokens
     refreshAuthTokenInterval() {
       if (this.onlineMode && this.userLoggedIn) {

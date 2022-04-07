@@ -8,7 +8,7 @@
     </ion-toolbar>
   </ion-header>
 </template>
-<script>
+<script lang="ts">
 import { IonHeader, IonToolbar, IonMenuButton, IonTitle,IonButtons } from "@ionic/vue";
 export default {
   components: {

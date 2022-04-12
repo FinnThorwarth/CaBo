@@ -32,6 +32,36 @@
                     </ion-select>
                   </ion-item>
                   <ion-item>
+                    <!-- Select car brand with combobox -->
+                    <!-- https://codepen.io/getflourish/pen/PzjyxM -->
+                    <div class="o-combobox">
+                      <input
+                        class="o-combobox__input"
+                        type="search"
+                        v-bind:placeholder="placeholder"
+                        v-model="starttime"
+                        v-on:click="showAutocompleteDropdown = true"
+                        v-on:keyup.enter.prevent="select(selectedIndex)"
+                        v-on:keydown.down.prevent="selectNext()"
+                        v-on:keydown.up.prevent="selectPrev()"
+                        v-on:keyup.8="handleBackspace()"
+                      />
+                      <ul class="o-date-list" v-if="showAutocompleteDropdown">
+                        <li
+                          class="o-date-list__item"
+                          v-for="time in times | filterBy starttime"
+                          v-on:click="select($index)"
+                          v-bind:class="{
+                            'o-date-list__item--selected':
+                              $index == selectedIndex,
+                          }"
+                        >
+                          {{ time }}
+                        </li>
+                      </ul>
+                    </div>
+                  </ion-item>
+                  <ion-item>
                     <ion-label position="floating">Model</ion-label>
                     <ion-input type="text" v-model="car.model"></ion-input>
                   </ion-item>

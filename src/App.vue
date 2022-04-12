@@ -2,17 +2,17 @@
   <ion-app>
     <ion-split-pane content-id="main-content">
       <!-- Insert Menu -->
-      <main-menu v-if="userLoggedIn" :userData="userData"  />
+      <main-menu v-if="userLoggedIn" :userData="userData" />
       <ion-router-outlet id="main-content"></ion-router-outlet>
     </ion-split-pane>
   </ion-app>
 </template>
 
 <script lang="ts">
-import { defineComponent} from "vue";
+import { defineComponent } from "vue";
 import axios from "axios";
 import { userTypes } from "./types/UserTypes";
-import  MainMenu from "./views/components/MainMenuComponent.vue";
+import MainMenu from "./views/components/MainMenuComponent.vue";
 import { IonApp, IonRouterOutlet, IonSplitPane } from "@ionic/vue";
 
 import {
@@ -57,7 +57,7 @@ export default defineComponent({
     this.refreshAuthTokenInterval();
   },
   methods: {
-     getLoggedIn() {
+    getLoggedIn() {
       if (
         localStorage.getItem("access_token") != null &&
         localStorage.getItem("access_token") != "undefined"
@@ -80,6 +80,7 @@ export default defineComponent({
 
     // Interval zum Prüfen und reaktivieren des Tokens
     refreshAuthTokenInterval() {
+      console.log("Check if refresh is needed");
       if (this.onlineMode && this.userLoggedIn) {
         setInterval(() => {
           console.log("Refreshing token");

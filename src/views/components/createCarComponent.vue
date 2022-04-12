@@ -19,47 +19,7 @@
               <ion-row>
                 <ion-col size="12">
                   <ion-item>
-                    <!-- Select car brand with search -->
-                    <ion-label position="floating">Marke</ion-label>
-                    <ion-select v-model="car.brand" placeholder="Marke">
-                      <ion-select-option
-                        v-for="brand in carBrands"
-                        :value="brand.id"
-                        :key="brand.id"
-                      >
-                        {{ brand.Name }}
-                      </ion-select-option>
-                    </ion-select>
-                  </ion-item>
-                  <ion-item>
-                    <!-- Select car brand with combobox -->
-                    <!-- https://codepen.io/getflourish/pen/PzjyxM -->
-                    <div class="o-combobox">
-                      <input
-                        class="o-combobox__input"
-                        type="search"
-                        v-bind:placeholder="placeholder"
-                        v-model="starttime"
-                        v-on:click="showAutocompleteDropdown = true"
-                        v-on:keyup.enter.prevent="select(selectedIndex)"
-                        v-on:keydown.down.prevent="selectNext()"
-                        v-on:keydown.up.prevent="selectPrev()"
-                        v-on:keyup.8="handleBackspace()"
-                      />
-                      <ul class="o-date-list" v-if="showAutocompleteDropdown">
-                        <li
-                          class="o-date-list__item"
-                          v-for="time in times | filterBy starttime"
-                          v-on:click="select($index)"
-                          v-bind:class="{
-                            'o-date-list__item--selected':
-                              $index == selectedIndex,
-                          }"
-                        >
-                          {{ time }}
-                        </li>
-                      </ul>
-                    </div>
+                    <combobox-component :items="carBrands" />
                   </ion-item>
                   <ion-item>
                     <ion-label position="floating">Model</ion-label>
@@ -108,8 +68,6 @@ import axios from "axios";
 import {
   IonLabel,
   IonInput,
-  IonSelect,
-  IonSelectOption,
   IonTextarea,
   IonItem,
   IonButton,
@@ -124,14 +82,13 @@ import {
 } from "@ionic/vue";
 
 import { CarTypes } from "../../types/CarTypes";
+import ComboboxComponent from "./uiComboBoxComponent.vue";
 
 export default defineComponent({
   name: "createCarComponent",
   components: {
     IonLabel,
     IonInput,
-    IonSelect,
-    IonSelectOption,
     IonTextarea,
     IonItem,
     IonButton,
@@ -143,6 +100,7 @@ export default defineComponent({
     IonCardTitle,
     IonCardContent,
     IonText,
+    ComboboxComponent,
   },
 
   data() {
